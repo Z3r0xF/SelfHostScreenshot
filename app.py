@@ -18,6 +18,7 @@ app.mount("/images", StaticFiles(directory=UPLOAD_FOLDER), name="images")
 API_KEY = os.getenv("API_KEY")
 api_key_header = APIKeyHeader(name="X-API-Key")
 
+
 def delete_file_after_delay(filepath: str, delay: int):
     time.sleep(delay)
     os.remove(filepath)
@@ -31,8 +32,8 @@ async def verify_api_key(api_key: str = Depends(api_key_header)):
 
 @app.post("/upload", dependencies=[Depends(verify_api_key)])
 async def upload_file( file: UploadFile = File(...)):
-    # Generate a unique filename
-    new_filename = f"{uuid.uuid4()}.png"
+    # Generate a unique filename and respect the image format
+    new_filename = f"{uuid.uuid4()}.{file.filename.split('.')[-1]}"
     file_location = os.path.join(UPLOAD_FOLDER, new_filename)
 
     # Save the uploaded file
