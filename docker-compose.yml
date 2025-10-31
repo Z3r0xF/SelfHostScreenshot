@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  selfhostscreenshot:
-    build: .
+  service_name:
+    image: z3r0xf/selfhostscreenshot:latest
     ports:
       - "7070:7070"
     environment:
