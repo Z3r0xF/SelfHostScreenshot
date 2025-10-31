@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, File, UploadFile
+from fastapi import FastAPI, Depends, File, UploadFile, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.security import APIKeyHeader
@@ -8,6 +8,8 @@ import os
 import uuid
 import time
 import logging
+import magic
+import mimetypes
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -19,6 +21,8 @@ app.mount("/images", StaticFiles(directory=UPLOAD_FOLDER), name="images")
  
 API_KEY = os.getenv("API_KEY")
 api_key_header = APIKeyHeader(name="X-API-Key")
+
+ALLOWED_MIME_TYPES = {'image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/x-msvideo', 'video/x-flv'}
 
 
 def delete_file_after_delay(filepath: str, delay: int):
@@ -32,10 +36,21 @@ async def verify_api_key(api_key: str = Depends(api_key_header)):
         raise HTTPException(status_code=403, detail="Unauthorized")
 
 
+def validate_file_type(file: UploadFile):
+
+    file_content = file.file.read(1024)  # Read bytes from the beginning of the file
+    file.file.seek(0)  # Reset the file cursor back to the beginning
+
+    # Magic library to detect the file type
+    mime_type = magic.from_buffer(file_content, mime=True)
+
+    if mime_type not in ALLOWED_MIME_TYPES:
+        raise HTTPException(status_code=400, detail="Unsupported file type. Allowed types: JPG, PNG, GIF, MP4, AVI, FLV.")
+
 @app.post("/upload", dependencies=[Depends(verify_api_key)])
 async def upload_file( file: UploadFile = File(...)):
 
-
+    validate_file_type(file)  # Validate file type
 
     # Generate a unique filename and respect the image format
     new_filename = f"{uuid.uuid4()}.{file.filename.split('.')[-1]}"
