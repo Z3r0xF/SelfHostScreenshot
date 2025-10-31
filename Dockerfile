@@ -6,8 +6,8 @@ ENV API_KEY=${API_KEY}
 ENV DELETE_TIME_MINUTES=${DELETE_TIME_MINUTES}
 
 COPY requirements.txt .
+COPY app.py .
 RUN pip install -r requirements.txt
 
-COPY . .
 
 CMD ["python", "app.py"]
