@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  selfhostscreenshot:
+    build: .
+    ports:
+      - "7070:7070"
+    environment:
+      - API_KEY=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX
+      - DELETE_TIME_MINUTES=1
