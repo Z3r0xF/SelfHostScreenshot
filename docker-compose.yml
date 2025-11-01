@@ -4,7 +4,7 @@ services:
   service_name:
     image: z3r0xf/selfhostscreenshot:latest
     ports:
-      - "7070:7070"
+      - "7070:5000"
     environment:
       - API_KEY=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX
       - DELETE_TIME_MINUTES=1

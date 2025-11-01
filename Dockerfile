@@ -2,6 +2,10 @@ FROM python:3.14-slim
 
 WORKDIR /app
 
+#Required for python-magic
+RUN apt-get update && apt-get install -y libmagic1
+
+
 ENV API_KEY=${API_KEY}
 ENV DELETE_TIME_MINUTES=${DELETE_TIME_MINUTES}
 
