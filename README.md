@@ -28,7 +28,7 @@ You can upload a file using the following curl command:
 
 
 ```
-curl -X POST https://YOURDOMAIN/upload \
+curl -X POST http://localhost:7070/upload \
   -H "X-API-Key: XXXXX-XXXXXX-XXXXX-XXXXX" \
   -F "file=@helloworld.jpg"
 ```
@@ -47,4 +47,4 @@ Once the screenshot is uploaded, you can quickly share it via your custom URL.
 
 It's up to you how you manage the response automatically:
 
-https://YOURDOMAIN/images/1dc4d2d9-8863-47e2-bd5c-b627c1ab478d.jpg
+http://localhost:7070/images/1dc4d2d9-8863-47e2-bd5c-b627c1ab478d.jpg
